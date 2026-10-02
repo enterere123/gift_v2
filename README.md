@@ -1,2 +1,2 @@
-# gift_v2
-it is gift_v2
+# This site was deleted by its creator.
+The creator might still have a local version of the site.
