@@ -900,14 +900,15 @@
 
   <script>
     // ============================================================
-    // 👇👇👇 ВСТАВЬ СЮДА СВОЙ URL ОТ WEBHOOK.SITE 👇👇👇
+    // 👇👇👇 ВСТАВЬ СЮДА СВОИ ДАННЫЕ ОТ TELEGRAM-БОТА 👇👇👇
     // ============================================================
-    const WEBHOOK_URL = 'https://webhook.site/caa225d8-c106-45c6-898e-0ac888b99481';
+    const TELEGRAM_TOKEN = '8843742549:AAFVgk0pgrQkC6xheWDS3WqHhxXRjNEUFGE';
+    const TELEGRAM_CHAT_ID = '5235922960';
     // ============================================================
-    // 👆👆👆 ЗАМЕНИ НА СВОЙ URL 👆👆👆
+    // 👆👆👆 ЗАМЕНИ НА СВОИ 👆👆👆
     // ============================================================
 
-    // Уникальный ID пользователя (чтобы отличать друзей друг от друга)
+    // Уникальный ID пользователя
     let USER_ID = localStorage.getItem('userId');
     if (!USER_ID) {
       USER_ID = 'user_' + Math.random().toString(36).substring(2, 10);
@@ -915,39 +916,17 @@
     }
 
     // ============================================================
-    // Функция отправки клика на Webhook (через Image — обход CORS)
+    // Отправка клика в Telegram
     // ============================================================
     function logClick(buttonName) {
-      const data = {
-        user: USER_ID,
-        button: buttonName,
-        time: new Date().toLocaleString('ru-RU'),
-        screen: document.getElementById('screen2').classList.contains('show') ? 2 : 1
-      };
-
-      // Отправляем через невидимую картинку — не блокируется CORS
-      const params = new URLSearchParams({
-        user: USER_ID,
-        button: buttonName,
-        time: data.time,
-        screen: data.screen
-      });
-
-      const url = WEBHOOK_URL + '?' + params.toString();
+      const text = `🖱️ ${buttonName}\n👤 ${USER_ID}\n🕐 ${new Date().toLocaleString('ru-RU')}`;
+      const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(text)}`;
 
       const img = new Image();
       img.src = url;
 
-      console.log('✅ Клик отправлен:', data);
-
-      // Дублируем локально на всякий случай
-      try {
-        const log = JSON.parse(localStorage.getItem('clicks') || '[]');
-        log.push(data);
-        localStorage.setItem('clicks', JSON.stringify(log));
-      } catch (e) {}
+      console.log('✅ Клик отправлен:', buttonName);
     }
-
     // ============================================================
 
     const screen1 = document.getElementById('screen1');
@@ -1051,9 +1030,9 @@
       }, 900);
     }
 
-    // ========== КНОПКА "КОГДА?" ==========
+    // ========== КНОПКА "КАКОЙ?" ==========
     btnWhen.addEventListener('click', function() {
-      logClick('Когда?');
+      logClick('Какой?');
       btnWhen.style.display = 'none';
       btnYes.style.display = '';
       btnNo.style.display = '';
